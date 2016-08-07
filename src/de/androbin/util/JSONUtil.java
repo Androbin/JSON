@@ -13,11 +13,19 @@ public final class JSONUtil
 	{
 	}
 	
+	@ SuppressWarnings( "resource" )
 	public static Object parseJSON( final String path )
 	{
+		final InputStream res = ResourceLoader.class.getResourceAsStream( "/json/" + path );
+		
+		if ( res == null )
+		{
+			return null;
+		}
+		
 		try
 		{
-			return new JSONParser().parse( new InputStreamReader( ResourceLoader.class.getResourceAsStream( "/json/" + path ) ) );
+			return new JSONParser().parse( new InputStreamReader( res ) );
 		}
 		catch ( final ParseException | IOException e )
 		{
