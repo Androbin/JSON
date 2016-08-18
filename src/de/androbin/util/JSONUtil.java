@@ -1,8 +1,7 @@
 package de.androbin.util;
 
-import static de.androbin.collection.util.DoubleCollectionUtil.*;
-import static de.androbin.collection.util.FloatCollectionUtil.*;
-import com.sun.xml.internal.ws.api.*;
+import static de.androbin.collection.util.DoubleCollectionUtil.fillParallel;
+import static de.androbin.collection.util.FloatCollectionUtil.fillParallel;
 import java.io.*;
 import org.json.simple.*;
 import org.json.simple.parser.*;
@@ -13,19 +12,18 @@ public final class JSONUtil
 	{
 	}
 	
-	@ SuppressWarnings( "resource" )
 	public static Object parseJSON( final String path )
 	{
-		final InputStream res = ResourceLoader.class.getResourceAsStream( "/json/" + path );
+		final InputStream res = ClassLoader.getSystemResourceAsStream( "json/" + path );
 		
 		if ( res == null )
 		{
 			return null;
 		}
 		
-		try
+		try ( final InputStreamReader reader = new InputStreamReader( res ) )
 		{
-			return new JSONParser().parse( new InputStreamReader( res ) );
+			return new JSONParser().parse( reader );
 		}
 		catch ( final ParseException | IOException e )
 		{
