@@ -12,17 +12,28 @@ public final class JSONUtil {
   private JSONUtil() {
   }
   
-  public static Optional<Object> parseJSON( final String path ) {
-    final URL res = ClassLoader.getSystemResource( "json/" + path );
-    
+  public static Optional<Object> parseJSON( final URL res ) {
     if ( res == null ) {
       return Optional.empty();
     }
     
     try ( final InputStreamReader reader = new InputStreamReader( res.openStream() ) ) {
       return Optional.of( new JSONParser().parse( reader ) );
-    } catch ( final ParseException | IOException e ) {
+    } catch ( final IOException | ParseException e ) {
       return Optional.empty();
+    }
+  }
+  
+  public static Optional<Object> parseJSON( final String path ) {
+    return parseJSON( ClassLoader.getSystemResource( "json/" + path ) );
+  }
+  
+  public static Object readJSON( final String path ) {
+    try {
+      return parseJSON( new URL( path ) ).get();
+    } catch ( final MalformedURLException e ) {
+      e.printStackTrace();
+      return null;
     }
   }
   
