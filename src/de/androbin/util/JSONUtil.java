@@ -2,6 +2,7 @@ package de.androbin.util;
 
 import static de.androbin.collection.util.DoubleCollectionUtil.fillParallel;
 import static de.androbin.collection.util.FloatCollectionUtil.fillParallel;
+import de.androbin.io.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -25,7 +26,7 @@ public final class JSONUtil {
   }
   
   public static Optional<Object> parseJSON( final String path ) {
-    return parseJSON( ClassLoader.getSystemResource( "json/" + path ) );
+    return parseJSON( DynamicClassLoader.get().getResource( "json/" + path ) );
   }
   
   public static Object readJSON( final String path ) {
