@@ -2,8 +2,11 @@ package de.androbin.util;
 
 import static de.androbin.collection.util.DoubleCollectionUtil.fillParallel;
 import static de.androbin.collection.util.FloatCollectionUtil.fillParallel;
+import de.androbin.func.*;
 import de.androbin.io.*;
+import java.awt.*;
 import java.io.*;
+import java.lang.reflect.*;
 import java.net.*;
 import java.util.*;
 import org.json.simple.*;
@@ -38,31 +41,48 @@ public final class JSONUtil {
     }
   }
   
-  public static double[] toDoubleArray( final Object o ) {
-    return toDoubleArray( toNumberArray( o ) );
+  @ SuppressWarnings( "unchecked" )
+  private static <T> T[] toArray( final Object o, final Class<T> cls ) {
+    final JSONArray array = (JSONArray) o;
+    return (T[]) array.toArray( (T[]) Array.newInstance( cls, array.size() ) );
   }
   
-  private static double[] toDoubleArray( final Number[] n ) {
-    return n == null ? null : fillParallel( new double[ n.length ], i -> n[ i ].doubleValue() );
+  public static Dimension toDimension( final Object o ) {
+    return toTuple( o, Dimension::new );
+  }
+  
+  public static double[] toDoubleArray( final Object o ) {
+    final Number[] array = toArray( o, Number.class );
+    return array == null ? null
+        : fillParallel( new double[ array.length ], i -> array[ i ].doubleValue() );
   }
   
   public static float[] toFloatArray( final Object o ) {
-    return toFloatArray( toNumberArray( o ) );
+    final Number[] array = toArray( o, Number.class );
+    return array == null ? null
+        : fillParallel( new float[ array.length ], i -> array[ i ].floatValue() );
   }
   
-  private static float[] toFloatArray( final Number[] n ) {
-    return n == null ? null : fillParallel( new float[ n.length ], i -> n[ i ].floatValue() );
+  public static int toInt( final Object o ) {
+    return ( (Number) o ).intValue();
   }
   
-  @ SuppressWarnings( "unchecked" )
-  private static Number[] toNumberArray( final Object o ) {
-    final JSONArray array = (JSONArray) o;
-    return (Number[]) array.toArray( new Number[ array.size() ] );
+  public static Point toPoint( final Object o ) {
+    return toTuple( o, Point::new );
   }
   
-  @ SuppressWarnings( "unchecked" )
   public static String[] toStringArray( final Object o ) {
+    return toArray( o, String.class );
+  }
+  
+  private static <T> T toTuple( final Object o, final BiIntFunction<T> func ) {
+    if ( o == null ) {
+      return null;
+    }
+    
     final JSONArray array = (JSONArray) o;
-    return (String[]) array.toArray( new String[ array.size() ] );
+    final int a = toInt( array.get( 0 ) );
+    final int b = toInt( array.get( 1 ) );
+    return func.apply( a, b );
   }
 }
