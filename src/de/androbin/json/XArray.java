@@ -1,5 +1,6 @@
 package de.androbin.json;
 
+import de.androbin.mixin.*;
 import java.util.*;
 import org.json.simple.*;
 
@@ -20,17 +21,7 @@ public final class XArray implements Iterable<XValue> {
   
   @ Override
   public Iterator<XValue> iterator() {
-    final Iterator< ? > iter = array.iterator();
-    return new Iterator<XValue>() {
-      @ Override
-      public XValue next() {
-        return new XValue( iter.next() );
-      }
-      
-      @ Override
-      public boolean hasNext() {
-        return iter.hasNext();
-      }
-    };
+    final Iterator<?> iter = array.iterator();
+    return new PipeIterator<>( iter, XValue::new );
   }
 }
