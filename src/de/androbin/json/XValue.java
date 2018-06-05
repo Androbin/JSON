@@ -1,7 +1,7 @@
 package de.androbin.json;
 
-import static de.androbin.json.JSONArrayUtil.*;
-import static de.androbin.json.JSONUtil.*;
+import static de.androbin.json.XArrayUtil.*;
+import static de.androbin.json.XObjectUtil.*;
 import java.awt.*;
 import org.json.simple.*;
 
@@ -95,5 +95,9 @@ public final class XValue {
   
   public String[] asStringArray() {
     return toStringArray( (JSONArray) obj );
+  }
+  
+  public boolean isNull() {
+    return obj == null;
   }
 }

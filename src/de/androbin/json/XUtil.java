@@ -2,15 +2,13 @@ package de.androbin.json;
 
 import de.androbin.func.*;
 import de.androbin.io.*;
-import java.awt.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import org.json.simple.*;
 import org.json.simple.parser.*;
 
-public final class JSONUtil {
-  private JSONUtil() {
+public final class XUtil {
+  private XUtil() {
   }
   
   public static XValue fetchJSON( final String path ) {
@@ -57,33 +55,14 @@ public final class JSONUtil {
   }
   
   public static XArray readJSONArray( final String path ) {
-    return JSONUtil.readJSON( path )
+    return XUtil.readJSON( path )
         .map( XValue::asArray )
         .orElseGet( XArray::new );
   }
   
   public static XObject readJSONObject( final String path ) {
-    return JSONUtil.readJSON( path )
+    return XUtil.readJSON( path )
         .map( XValue::asObject )
         .orElseGet( XObject::new );
-  }
-  
-  public static Dimension toDimension( final JSONArray o ) {
-    return toTuple( o, Dimension::new );
-  }
-  
-  public static Point toPoint( final JSONArray o ) {
-    return toTuple( o, Point::new );
-  }
-  
-  private static <T> T toTuple( final JSONArray o, final BiIntFunction<T> func ) {
-    if ( o == null ) {
-      return null;
-    }
-    
-    final XArray array = new XArray( o );
-    final int a = array.get( 0 ).asInt();
-    final int b = array.get( 1 ).asInt();
-    return func.apply( a, b );
   }
 }
