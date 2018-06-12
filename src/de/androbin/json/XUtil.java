@@ -1,9 +1,10 @@
 package de.androbin.json;
 
-import de.androbin.func.*;
 import de.androbin.io.*;
+import de.androbin.io.util.*;
 import java.io.*;
 import java.net.*;
+import java.nio.file.*;
 import java.util.*;
 import org.json.simple.parser.*;
 
@@ -11,9 +12,9 @@ public final class XUtil {
   private XUtil() {
   }
   
-  public static XValue fetchJSON( final String path ) {
+  public static XValue fetchJSON( final String url ) throws IOException {
     try {
-      return readJSON( new URL( path ) ).get();
+      return FileReaderUtil.fetch( url, XUtil::readJSON ).get();
     } catch ( final MalformedURLException e ) {
       e.printStackTrace();
       return null;
@@ -29,8 +30,8 @@ public final class XUtil {
     }
   }
   
-  public static Optional<XValue> readJSON( final DirtySupplier<Reader, IOException> source ) {
-    try ( final Reader reader = source.get() ) {
+  public static Optional<XValue> readJSON( final Reader reader ) {
+    try {
       final Object value = new JSONParser().parse( reader );
       return Optional.of( new XValue( value ) );
     } catch ( final IOException | ParseException e ) {
@@ -38,20 +39,20 @@ public final class XUtil {
     }
   }
   
-  public static Optional<XValue> readJSON( final File file ) {
-    return readJSON( () -> new FileReader( file ) );
-  }
-  
-  public static Optional<XValue> readJSON( final URL res ) {
-    if ( res == null ) {
+  public static Optional<XValue> readJSON( final Path path ) {
+    if ( path == null ) {
       return Optional.empty();
     }
     
-    return readJSON( () -> new InputStreamReader( res.openStream() ) );
+    try {
+      return FileReaderUtil.readFile( path, XUtil::readJSON );
+    } catch ( final IOException e ) {
+      return Optional.empty();
+    }
   }
   
   public static Optional<XValue> readJSON( final String path ) {
-    return readJSON( DynamicClassLoader.get().getResource( "json/" + path ) );
+    return readJSON( DynamicClassLoader.getPath( "json/" + path ) );
   }
   
   public static XArray readJSONArray( final String path ) {
