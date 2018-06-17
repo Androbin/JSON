@@ -8,7 +8,7 @@ public final class XArray implements Iterable<XValue> {
   private final List<?> array;
   
   public XArray() {
-    this( new JSONArray() );
+    this( Collections.emptyList() );
   }
   
   public XArray( final List<?> array ) {
@@ -23,6 +23,10 @@ public final class XArray implements Iterable<XValue> {
   public Iterator<XValue> iterator() {
     final Iterator<?> iter = array.iterator();
     return new PipeIterator<>( iter, XValue::new );
+  }
+  
+  public int size() {
+    return array.size();
   }
   
   @ Override

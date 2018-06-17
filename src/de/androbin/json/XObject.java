@@ -8,7 +8,7 @@ public final class XObject {
   private final Map<?, ?> obj;
   
   public XObject() {
-    this( new JSONObject() );
+    this( Collections.emptyMap() );
   }
   
   public XObject( final Map<?, ?> obj ) {
