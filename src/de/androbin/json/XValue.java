@@ -100,4 +100,8 @@ public final class XValue {
   public boolean isNull() {
     return obj == null;
   }
+  
+  public Object raw() {
+    return obj;
+  }
 }

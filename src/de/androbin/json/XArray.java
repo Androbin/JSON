@@ -31,10 +31,15 @@ public final class XArray implements Iterable<XValue> {
   
   @ Override
   public String toString() {
-    return toString( array );
+    return toString( false );
   }
   
-  public static String toString( final List<?> array ) {
-    return JSONArray.toJSONString( array );
+  public String toString( final boolean pretty ) {
+    return toString( array, pretty );
+  }
+  
+  public static String toString( final List<?> array, final boolean pretty ) {
+    final String dirty = JSONArray.toJSONString( array );
+    return pretty ? XFormatUtil.format( dirty ) : dirty;
   }
 }
