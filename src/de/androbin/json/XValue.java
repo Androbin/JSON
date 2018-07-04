@@ -3,6 +3,7 @@ package de.androbin.json;
 import static de.androbin.json.XArrayUtil.*;
 import static de.androbin.json.XObjectUtil.*;
 import java.awt.*;
+import java.util.function.*;
 import org.json.simple.*;
 
 public final class XValue {
@@ -10,6 +11,12 @@ public final class XValue {
   
   public XValue( final Object obj ) {
     this.obj = obj;
+  }
+  
+  public void apply( final Consumer<XValue> func ) {
+    if ( obj != null ) {
+      func.accept( this );
+    }
   }
   
   @ SuppressWarnings( "unchecked" )
