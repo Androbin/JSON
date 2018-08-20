@@ -8,11 +8,11 @@ public final class XArray implements Iterable<XValue> {
   private final List<?> array;
   
   public XArray() {
-    this( Collections.emptyList() );
+    this( null );
   }
   
   public XArray( final List<?> array ) {
-    this.array = array;
+    this.array = array == null ? Collections.emptyList() : array;
   }
   
   public XValue get( final int index ) {

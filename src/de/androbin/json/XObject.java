@@ -8,11 +8,11 @@ public final class XObject {
   private final Map<String, ?> obj;
   
   public XObject() {
-    this( Collections.emptyMap() );
+    this( null );
   }
   
   public XObject( final Map<String, ?> obj ) {
-    this.obj = obj;
+    this.obj = obj == null ? Collections.emptyMap() : obj;
   }
   
   public void forEach( final BiConsumer<String, XValue> action ) {
