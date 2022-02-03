@@ -1,8 +1,9 @@
 package de.androbin.json;
 
 import de.androbin.mixin.iter.*;
+import org.json.simple.JSONArray;
+
 import java.util.*;
-import org.json.simple.*;
 
 public final class XArray implements Iterable<XValue> {
   private final List<?> array;
